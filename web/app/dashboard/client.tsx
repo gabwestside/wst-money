@@ -1,18 +1,22 @@
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { InfoIcon } from 'lucide-react'
+import type { DashboardData } from '@/lib/dashboard'
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
   ArcElement,
-  Tooltip,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
   Legend,
+  LinearScale,
+  Tooltip,
 } from 'chart.js'
 import { Bar, Doughnut } from 'react-chartjs-2'
-import type { DashboardData } from '@/lib/dashboard'
+// import { InfoIcon } from 'lucide-react'
+// import { useRouter } from 'next/navigation'
+// import { useEffect } from 'react'
+// import { createBrowserClient } from '@supabase/ssr'
+import NewTransactionDialog from '@/components/new-transaction-dialog'
 
 ChartJS.register(
   CategoryScale,
@@ -50,6 +54,29 @@ const SummaryCard = ({
 )
 
 export default function DashboardClient({ userName, data }: Props) {
+  // const router = useRouter() //TODO: terminar a implementação do realtime
+  //                            // atualiza dados ao receber eventos de mudanças na tabela "transactions"
+
+  // useEffect(() => {
+  //   const supabase = createBrowserClient(
+  //     process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  //     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  //   )
+
+  //   const channel = supabase
+  //     .channel('realtime-transactions')
+  //     .on(
+  //       'postgres_changes',
+  //       { event: '*', schema: 'public', table: 'transactions' },
+  //       () => router.refresh()
+  //     )
+  //     .subscribe()
+
+  //   return () => {
+  //     supabase.removeChannel(channel)
+  //   }
+  // }, [router])
+
   const balance = data.incomesTotal - data.expensesTotal
 
   const barData = {
@@ -87,9 +114,12 @@ export default function DashboardClient({ userName, data }: Props) {
   return (
     <div className='space-y-6'>
       {/* Header */}
-      <div className='flex items-center gap-2'>
-        <InfoIcon size={16} strokeWidth={2} />
-        <h1 className='text-2xl font-bold'>Olá, {userName} 👋</h1>
+      <div className='grid gap-4 md:grid-cols-2'>
+        <div className='flex items-center gap-2'>
+          {/* <InfoIcon size={16} strokeWidth={2} /> */}
+          <h1 className='text-xl font-bold '>Olá, {userName}</h1>
+        </div>
+        <NewTransactionDialog className='ml-auto w-full md:max-w-40' />
       </div>
       <p className='text-muted-foreground'>Resumo financeiro do mês</p>
 
@@ -116,26 +146,6 @@ export default function DashboardClient({ userName, data }: Props) {
           color='text-blue-600'
         />
       </div>
-
-      {/* Gráfico de barras (por dia) */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Visão diária do mês</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Bar data={barData} />
-        </CardContent>
-      </Card>
-
-      {/* Gráfico pizza 50/30/20 */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Distribuição 50/30/20 (Despesas)</CardTitle>
-        </CardHeader>
-        <CardContent className='max-w-md'>
-          <Doughnut data={doughnutData} />
-        </CardContent>
-      </Card>
 
       {/* Últimas transações */}
       <Card>
@@ -171,6 +181,86 @@ export default function DashboardClient({ userName, data }: Props) {
           </ul>
         </CardContent>
       </Card>
+
+      <div className='grid gap-4 md:grid-cols-2'>
+        {/* Gráfico de barras (por dia) */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Visão diária do mês</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Bar data={barData} />
+          </CardContent>
+        </Card>
+
+        {/* Gráfico pizza 50/30/20 */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Distribuição 50/30/20 (Despesas)</CardTitle>
+          </CardHeader>
+          <CardContent className='max-w-md'>
+            <Doughnut data={doughnutData} />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Gráfico de barras (por dia) */}
+      {/* <div className='w-full overflow-x-auto'>
+        <Card className='min-w-[320px]'>
+          <CardHeader>
+            <CardTitle>Visão diária do mês</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='w-full min-w-[280px] max-w-full'>
+              <Bar
+                data={barData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { display: true },
+                  },
+                  scales: {
+                    x: {
+                      ticks: {
+                        autoSkip: false,
+                        maxRotation: 45,
+                        minRotation: 0,
+                      },
+                    },
+                    y: { beginAtZero: true },
+                  },
+                }}
+                height={240}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </div> */}
+
+      {/* Gráfico pizza 50/30/20 */}
+      {/* <div className='w-full flex justify-center'>
+        <Card className='w-full max-w-xs sm:max-w-md'>
+          <CardHeader>
+            <CardTitle>Distribuição 50/30/20 (Despesas)</CardTitle>
+          </CardHeader>
+          <CardContent className='flex justify-center'>
+            <div className='w-40 sm:w-64'>
+              <Doughnut
+                data={doughnutData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: { position: 'bottom' },
+                  },
+                }}
+                height={180}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </div> */}
     </div>
   )
 }
