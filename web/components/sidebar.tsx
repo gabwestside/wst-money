@@ -7,10 +7,10 @@ import { ThemeSwitcher } from './theme-switcher'
 
 const links = [
   { href: '/dashboard', label: 'Dashboard' },
-  { href: '/entries/new', label: 'Nova Entrada' },
-  { href: '/expenses/new', label: 'Novo Gasto' },
-  { href: '/history', label: 'Histórico' },
-  { href: '/settings', label: 'Configurações' },
+  { href: '/entries/new', label: 'New Entry' },
+  { href: '/expenses/new', label: 'New Spending' },
+  { href: '/history', label: 'History' },
+  { href: '/settings', label: 'Settings' },
 ]
 
 export default function Sidebar() {
@@ -18,7 +18,7 @@ export default function Sidebar() {
 
   return (
     <aside className='w-64 p-4 bg-card border-r shadow-sm'>
-      <h2 className='text-lg font-bold mb-4'>Finanças Pessoais</h2>
+      <h2 className='text-lg font-bold mb-4'>Personal Finance</h2>
       <nav className='space-y-2'>
         {links.map(({ href, label }) => (
           <Link

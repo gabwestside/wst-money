@@ -19,7 +19,7 @@ export default async function DashboardPage() {
 
   return (
     <DashboardClient
-      userName={user.user_metadata?.name || user.email || 'Usuário'}
+      userName={user.user_metadata?.name || user.email || 'User'}
       data={data}
     />
   )

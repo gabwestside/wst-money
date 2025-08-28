@@ -1,5 +1,8 @@
 'use client'
 
+import NewTransactionDialog from '@/components/new-transaction-dialog'
+import { SummaryCard } from '@/components/summary-card'
+import { ThemeSwitcher } from '@/components/theme-switcher'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { DashboardData } from '@/lib/dashboard'
 import {
@@ -12,11 +15,6 @@ import {
   Tooltip,
 } from 'chart.js'
 import { Bar, Doughnut } from 'react-chartjs-2'
-// import { InfoIcon } from 'lucide-react'
-// import { useRouter } from 'next/navigation'
-// import { useEffect } from 'react'
-// import { createBrowserClient } from '@supabase/ssr'
-import NewTransactionDialog from '@/components/new-transaction-dialog'
 
 ChartJS.register(
   CategoryScale,
@@ -31,27 +29,6 @@ type Props = {
   userName: string
   data: DashboardData
 }
-
-const SummaryCard = ({
-  title,
-  value,
-  color,
-}: {
-  title: string
-  value: number
-  color: string
-}) => (
-  <Card>
-    <CardHeader>
-      <CardTitle>{title}</CardTitle>
-    </CardHeader>
-    <CardContent>
-      <p className={`text-2xl font-semibold ${color}`}>
-        R$ {value.toLocaleString('pt-BR')}
-      </p>
-    </CardContent>
-  </Card>
-)
 
 export default function DashboardClient({ userName, data }: Props) {
   // const router = useRouter() //TODO: terminar a implementação do realtime
@@ -113,44 +90,40 @@ export default function DashboardClient({ userName, data }: Props) {
 
   return (
     <div className='space-y-6'>
-      {/* Header */}
       <div className='grid gap-4 md:grid-cols-2'>
         <div className='flex items-center gap-2'>
           {/* <InfoIcon size={16} strokeWidth={2} /> */}
-          <h1 className='text-xl font-bold '>Olá, {userName}</h1>
+          <h1 className='text-xl font-bold '>Hello, {userName}</h1>
         </div>
-        <NewTransactionDialog className='ml-auto w-full md:max-w-40' />
       </div>
-      <p className='text-muted-foreground'>Resumo financeiro do mês</p>
+      <p className='text-muted-foreground'>Financial summary for the month</p>
 
-      {/* Cards resumo */}
       <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
         <SummaryCard
-          title='Saldo Atual'
+          title='Current Balance'
           value={balance}
           color={balance >= 0 ? 'text-green-600' : 'text-red-600'}
         />
         <SummaryCard
-          title='Total de Entradas'
+          title='Incomes'
           value={data.incomesTotal}
           color='text-green-600'
         />
         <SummaryCard
-          title='Total de Despesas'
+          title='Outcomes'
           value={data.expensesTotal}
           color='text-red-600'
         />
         <SummaryCard
-          title='Investimentos (20%)'
+          title='Investments (20%)'
           value={data.bucket20}
           color='text-blue-600'
         />
       </div>
 
-      {/* Últimas transações */}
       <Card>
         <CardHeader>
-          <CardTitle>Últimas Transações</CardTitle>
+          <CardTitle>Latest Transactions</CardTitle>
         </CardHeader>
         <CardContent>
           <ul className='divide-y divide-gray-200'>
@@ -183,7 +156,6 @@ export default function DashboardClient({ userName, data }: Props) {
       </Card>
 
       <div className='grid gap-4 md:grid-cols-2'>
-        {/* Gráfico de barras (por dia) */}
         <Card>
           <CardHeader>
             <CardTitle>Visão diária do mês</CardTitle>
@@ -204,63 +176,10 @@ export default function DashboardClient({ userName, data }: Props) {
         </Card>
       </div>
 
-      {/* Gráfico de barras (por dia) */}
-      {/* <div className='w-full overflow-x-auto'>
-        <Card className='min-w-[320px]'>
-          <CardHeader>
-            <CardTitle>Visão diária do mês</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className='w-full min-w-[280px] max-w-full'>
-              <Bar
-                data={barData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: { display: true },
-                  },
-                  scales: {
-                    x: {
-                      ticks: {
-                        autoSkip: false,
-                        maxRotation: 45,
-                        minRotation: 0,
-                      },
-                    },
-                    y: { beginAtZero: true },
-                  },
-                }}
-                height={240}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </div> */}
-
-      {/* Gráfico pizza 50/30/20 */}
-      {/* <div className='w-full flex justify-center'>
-        <Card className='w-full max-w-xs sm:max-w-md'>
-          <CardHeader>
-            <CardTitle>Distribuição 50/30/20 (Despesas)</CardTitle>
-          </CardHeader>
-          <CardContent className='flex justify-center'>
-            <div className='w-40 sm:w-64'>
-              <Doughnut
-                data={doughnutData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: { position: 'bottom' },
-                  },
-                }}
-                height={180}
-              />
-            </div>
-          </CardContent>
-        </Card>
-      </div> */}
+      <footer className='fixed bottom-4 right-14 md:bottom-8 md:right-8 flex items-center gap-4'>
+        <NewTransactionDialog className='ml-auto w-full md:max-w-40' />
+        <ThemeSwitcher />
+      </footer>
     </div>
   )
 }

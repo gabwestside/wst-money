@@ -30,12 +30,12 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button {...props}>+ Nova transação</Button>
+        <Button {...props}>+ Transaction</Button>
       </DialogTrigger>
 
       <DialogContent className='sm:max-w-md'>
         <DialogHeader>
-          <DialogTitle>Adicionar transação</DialogTitle>
+          <DialogTitle>Add transaction</DialogTitle>
         </DialogHeader>
 
         <form
@@ -44,7 +44,7 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
             startTransition(async () => {
               const res = await createTransaction(fd)
               if (!res.ok) {
-                setError(res.error ?? 'Falha ao salvar')
+                setError(res.error ?? 'Save failed')
                 return
               }
               setOpen(false)
@@ -54,17 +54,17 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
           className='space-y-4'
         >
           <div className='grid gap-2'>
-            <Label htmlFor='title'>Título</Label>
+            <Label htmlFor='title'>Title</Label>
             <Input
               id='title'
               name='title'
-              placeholder='Ex.: Salário, Aluguel, Mercado'
+              placeholder='E.g. Salary, Rent, Market'
               required
             />
           </div>
 
           <div className='grid gap-2'>
-            <Label htmlFor='amount'>Valor</Label>
+            <Label htmlFor='amount'>Value</Label>
             <Input
               id='amount'
               name='amount'
@@ -77,31 +77,31 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
           </div>
 
           <div className='grid gap-2'>
-            <Label>Tipo</Label>
+            <Label>Type</Label>
             <Select name='type' defaultValue='expense'>
               <SelectTrigger>
                 <SelectValue placeholder='Selecione' />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='income'>Receita</SelectItem>
-                <SelectItem value='expense'>Despesa</SelectItem>
+                <SelectItem value='income'>Income</SelectItem>
+                <SelectItem value='expense'>Outcome</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className='grid gap-2'>
-            <Label>Categoria</Label>
+            <Label>Category</Label>
             <Select name='category' defaultValue='essential'>
               <SelectTrigger>
                 <SelectValue placeholder='Categoria' />
               </SelectTrigger>
               <SelectContent>
                 {/* presets 50/30/20 */}
-                <SelectItem value='essential'>Essencial (50%)</SelectItem>
+                <SelectItem value='essential'>Essential (50%)</SelectItem>
                 <SelectItem value='non-essential'>
-                  Não essencial (30%)
+                  Non-Essential (30%)
                 </SelectItem>
-                <SelectItem value='investment'>Investimento (20%)</SelectItem>
+                <SelectItem value='investment'>Investment (20%)</SelectItem>
                 {/* Pode digitar livre usando o input abaixo se você preferir um campo texto.
                     Mantive Select para seu método 50/30/20. */}
               </SelectContent>
@@ -109,7 +109,7 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
           </div>
 
           <div className='grid gap-2'>
-            <Label htmlFor='date'>Data</Label>
+            <Label htmlFor='date'>Date</Label>
             <Input id='date' name='date' type='date' />
           </div>
 
@@ -121,10 +121,10 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
               variant='outline'
               onClick={() => setOpen(false)}
             >
-              Cancelar
+              Cancel
             </Button>
             <Button type='submit' disabled={pending}>
-              {pending ? 'Salvando...' : 'Salvar'}
+              {pending ? 'Saving...' : 'Save'}
             </Button>
           </div>
         </form>
