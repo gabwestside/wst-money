@@ -11,12 +11,12 @@ export const SummaryCard = ({
   color,
   ...props
 }: SummaryCardProps) => (
-  <Card {...props}>
+  <Card {...props} className={`${color}`}>
     <CardHeader>
       <CardTitle>{title}</CardTitle>
     </CardHeader>
     <CardContent>
-      <p className={`text-2xl font-semibold ${color}`}>
+      <p className='text-2xl font-semibold'>
         R$ {value.toLocaleString('pt-BR')}
       </p>
     </CardContent>

@@ -102,22 +102,23 @@ export default function DashboardClient({ userName, data }: Props) {
         <SummaryCard
           title='Current Balance'
           value={balance}
-          color={balance >= 0 ? 'text-green-600' : 'text-red-600'}
+          // color={balance >= 0 ? 'text-green-600' : 'text-red-600'}
+          color='bg-purple-300 text-black'
         />
         <SummaryCard
           title='Incomes'
           value={data.incomesTotal}
-          color='text-green-600'
+          color='bg-green-300 text-black'
         />
         <SummaryCard
           title='Outcomes'
           value={data.expensesTotal}
-          color='text-red-600'
+          color='bg-red-300 text-black'
         />
         <SummaryCard
           title='Investments (20%)'
           value={data.bucket20}
-          color='text-blue-600'
+          color='bg-blue-300 text-black'
         />
       </div>
 
