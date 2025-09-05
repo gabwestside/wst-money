@@ -1,9 +1,11 @@
 'use client'
 
 import { LatestTransactions } from '@/components/last-transactions'
+import MonthSelect from '@/components/month-select'
 import NewTransactionDialog from '@/components/new-transaction-dialog'
 import { SummaryCard } from '@/components/summary-card'
 import { ThemeSwitcher } from '@/components/theme-switcher'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { DashboardData } from '@/lib/dashboard'
 import {
@@ -15,6 +17,9 @@ import {
   LinearScale,
   Tooltip,
 } from 'chart.js'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useMemo } from 'react'
 import { Bar, Doughnut } from 'react-chartjs-2'
 
 ChartJS.register(
@@ -29,31 +34,11 @@ ChartJS.register(
 type Props = {
   userName: string
   data: DashboardData
+  monthValue: string
 }
 
-export default function DashboardClient({ userName, data }: Props) {
-  // const router = useRouter() //TODO: terminar a implementação do realtime
-  //                            // atualiza dados ao receber eventos de mudanças na tabela "transactions"
-
-  // useEffect(() => {
-  //   const supabase = createBrowserClient(
-  //     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  //     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  //   )
-
-  //   const channel = supabase
-  //     .channel('realtime-transactions')
-  //     .on(
-  //       'postgres_changes',
-  //       { event: '*', schema: 'public', table: 'transactions' },
-  //       () => router.refresh()
-  //     )
-  //     .subscribe()
-
-  //   return () => {
-  //     supabase.removeChannel(channel)
-  //   }
-  // }, [router])
+export default function DashboardClient({ userName, data, monthValue }: Props) {
+  const router = useRouter()
 
   const balance = data.incomesTotal - data.expensesTotal
 
@@ -72,7 +57,7 @@ export default function DashboardClient({ userName, data }: Props) {
       },
       {
         label: 'Despesa',
-        data: data.monthlyByType.expense.map((v) => -Math.abs(v)), // mostra negativas
+        data: data.monthlyByType.expense.map((v) => -Math.abs(v)),
         backgroundColor: 'rgba(239,68,68,0.8)',
       },
     ],
@@ -83,27 +68,75 @@ export default function DashboardClient({ userName, data }: Props) {
     datasets: [
       {
         data: [data.bucket50, data.bucket30, data.bucket20],
-        // Chart.js escolhe as cores se não for especificado, mas deixei 3 básicas:
         backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6'],
       },
     ],
+  }
+
+  const monthLabel = useMemo(() => {
+    const [y, m] = (monthValue ?? '').split('-').map(Number)
+    if (!y || !m) return ''
+    const MONTHS = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ]
+    return `${MONTHS[m - 1]} ${y}`
+  }, [monthValue])
+
+  function shift(value: string, delta: number) {
+    const y = Number(value.slice(0, 4))
+    const m = Number(value.slice(5, 7)) - 1
+    const d = new Date(y, m + delta, 1)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
   }
 
   return (
     <div className='space-y-6'>
       <div className='grid gap-4 md:grid-cols-2'>
         <div className='flex items-center gap-2'>
-          {/* <InfoIcon size={16} strokeWidth={2} /> */}
-          <h1 className='text-xl font-bold '>Hello, {userName}</h1>
+          <h1 className='text-xl font-bold'>Hello, {userName}</h1>
+        </div>
+        <div className='flex items-center justify-end gap-2'>
+          <Button
+            variant='outline'
+            size='icon'
+            onClick={() => router.push(`/dashboard?m=${shift(monthValue, -1)}`)}
+            aria-label='Previous month'
+          >
+            <ChevronLeft className='h-4 w-4' />
+          </Button>
+
+          <MonthSelect value={monthValue} />
+
+          <Button
+            variant='outline'
+            size='icon'
+            onClick={() => router.push(`/dashboard?m=${shift(monthValue, +1)}`)}
+            aria-label='Next month'
+          >
+            <ChevronRight className='h-4 w-4' />
+          </Button>
         </div>
       </div>
-      <p className='text-muted-foreground'>Financial summary for the month</p>
+
+      <p className='text-muted-foreground'>
+        Financial summary for {monthLabel}
+      </p>
 
       <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
         <SummaryCard
           title='Current Balance'
           value={balance}
-          // color={balance >= 0 ? 'text-green-600' : 'text-red-600'}
           color='bg-purple-300 text-black'
         />
         <SummaryCard
@@ -135,7 +168,6 @@ export default function DashboardClient({ userName, data }: Props) {
           </CardContent>
         </Card>
 
-        {/* Gráfico pizza 50/30/20 */}
         <Card>
           <CardHeader>
             <CardTitle>Distribuição 50/30/20 (Despesas)</CardTitle>

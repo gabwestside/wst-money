@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { startOfMonth, endOfMonth } from 'date-fns'
+import { endOfMonth, startOfMonth } from 'date-fns'
 
 export type Transaction = {
   id: string
@@ -25,14 +25,16 @@ export type DashboardData = {
   }
 }
 
-export async function getDashboardData(): Promise<DashboardData> {
+type MonthOpt = { year: number; month: number }
+
+export async function getDashboardData(opt?: MonthOpt): Promise<DashboardData> {
   const supabase = await createClient()
 
-  // período do mês atual
-  const from = startOfMonth(new Date()).toISOString()
-  const to = endOfMonth(new Date()).toISOString()
+  const base = opt ? new Date(opt.year, opt.month - 1, 1) : new Date()
 
-  // busca transações do mês
+  const from = startOfMonth(base).toISOString()
+  const to = endOfMonth(base).toISOString()
+
   const { data, error } = await supabase
     .from('transactions')
     .select('*')
@@ -43,56 +45,47 @@ export async function getDashboardData(): Promise<DashboardData> {
   if (error) throw error
   const tx = (data ?? []) as Transaction[]
 
-  const incomesTotal = tx
-    .filter((t) => t.type === 'income')
-    .reduce((acc, t) => acc + Number(t.amount), 0)
+  const sum = (arr: Transaction[]) =>
+    arr.reduce((a, t) => a + Number(t.amount), 0)
 
-  const expensesTotal = tx
-    .filter((t) => t.type === 'expense')
-    .reduce((acc, t) => acc + Number(t.amount), 0)
+  const incomesTotal = sum(tx.filter((t) => t.type === 'income'))
+  const expensesTotal = sum(tx.filter((t) => t.type === 'expense'))
 
-  // buckets 50/30/20 por category (case-insensitive)
   const norm = (s: string) => s?.toLowerCase?.().trim()
-  const bucket50 = tx
-    .filter(
+  const bucket50 = sum(
+    tx.filter(
       (t) =>
         t.type === 'expense' &&
         ['essential', 'essencial'].includes(norm(t.category))
     )
-    .reduce((acc, t) => acc + Number(t.amount), 0)
-
-  const bucket30 = tx
-    .filter(
+  )
+  const bucket30 = sum(
+    tx.filter(
       (t) =>
         t.type === 'expense' &&
         ['non-essential', 'nao-essencial', 'não-essencial'].includes(
           norm(t.category)
         )
     )
-    .reduce((acc, t) => acc + Number(t.amount), 0)
-
-  const bucket20 = tx
-    .filter(
+  )
+  const bucket20 = sum(
+    tx.filter(
       (t) =>
         t.type === 'expense' &&
         ['investment', 'investimento'].includes(norm(t.category))
     )
-    .reduce((acc, t) => acc + Number(t.amount), 0)
+  )
 
-  // série mensal (por dia) para o gráfico de barras
-  // labels = dias do mês que têm movimentação
   const mapIncomeByDay = new Map<string, number>()
   const mapExpenseByDay = new Map<string, number>()
   for (const t of tx) {
-    const day = new Date(t.created_at).toISOString().slice(0, 10) // YYYY-MM-DD
+    const day = new Date(t.created_at).toISOString().slice(0, 10)
     const map = t.type === 'income' ? mapIncomeByDay : mapExpenseByDay
     map.set(day, (map.get(day) ?? 0) + Number(t.amount))
   }
-  const labelSet = new Set<string>([
-    ...Array.from(mapIncomeByDay.keys()),
-    ...Array.from(mapExpenseByDay.keys()),
-  ])
-  const labels = Array.from(labelSet).sort()
+  const labels = Array.from(
+    new Set([...mapIncomeByDay.keys(), ...mapExpenseByDay.keys()])
+  ).sort()
   const monthlyByType = {
     labels,
     income: labels.map((d) => mapIncomeByDay.get(d) ?? 0),
