@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/sonner'
 import type { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { Geist } from 'next/font/google'
@@ -34,6 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster richColors position="top-right" closeButton />
         </ThemeProvider>
       </body>
     </html>

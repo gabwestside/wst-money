@@ -1,5 +1,6 @@
 'use client'
 
+import { LatestTransactions } from '@/components/last-transactions'
 import NewTransactionDialog from '@/components/new-transaction-dialog'
 import { SummaryCard } from '@/components/summary-card'
 import { ThemeSwitcher } from '@/components/theme-switcher'
@@ -122,39 +123,7 @@ export default function DashboardClient({ userName, data }: Props) {
         />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Latest Transactions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ul className='divide-y divide-gray-200'>
-            {data.lastTransactions.map((t) => (
-              <li key={t.id} className='flex items-center justify-between py-2'>
-                <div className='flex flex-col'>
-                  <span className='font-medium'>{t.title}</span>
-                  <span className='text-xs text-muted-foreground'>
-                    {new Date(t.created_at).toLocaleString('pt-BR')} •{' '}
-                    {t.category} • {t.type}
-                  </span>
-                </div>
-                <span
-                  className={`font-semibold ${
-                    t.type === 'income' ? 'text-green-600' : 'text-red-600'
-                  }`}
-                >
-                  {t.type === 'income' ? '+' : '-'} R${' '}
-                  {Math.abs(Number(t.amount)).toLocaleString('pt-BR')}
-                </span>
-              </li>
-            ))}
-            {data.lastTransactions.length === 0 && (
-              <li className='py-4 text-sm text-muted-foreground'>
-                Nenhuma transação neste mês.
-              </li>
-            )}
-          </ul>
-        </CardContent>
-      </Card>
+      <LatestTransactions data={data} />
 
       <div className='grid gap-4 md:grid-cols-2'>
         <Card>

@@ -1,8 +1,8 @@
 'use server'
 
-import { z } from 'zod'
-import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { revalidatePath } from 'next/cache'
+import { z } from 'zod'
 
 const schema = z.object({
   title: z.string().min(2, 'Informe um título'),
@@ -44,6 +44,30 @@ export async function createTransaction(formData: FormData) {
   const { error } = await supabase
     .from('transactions')
     .insert([{ title, amount, type, category, created_at, user_id: user.id }])
+
+  if (error) return { ok: false, error: error.message }
+
+  // atualiza a dashboard
+  revalidatePath('/dashboard')
+  return { ok: true }
+}
+
+export async function deleteTransaction(formData: FormData) {
+  const id = String(formData.get('id') ?? '')
+  if (!id) return { ok: false, error: 'ID inválido' }
+
+  const supabase = await createClient()
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
+  if (userError || !user) return { ok: false, error: 'Não autenticado' }
+
+  const { error } = await supabase
+    .from('transactions')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', user.id) // garante que só apaga o que é do usuário
 
   if (error) return { ok: false, error: error.message }
 

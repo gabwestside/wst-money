@@ -1,6 +1,5 @@
 'use client'
 
-import { ButtonHTMLAttributes, useState, useTransition } from 'react'
 import { createTransaction } from '@/app/actions/transactions'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,8 +19,12 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useRouter } from 'next/navigation'
+import { ButtonHTMLAttributes, useState, useTransition } from 'react'
+import { toast } from 'sonner'
 
-export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HTMLButtonElement>) {
+export default function NewTransactionDialog({
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement>) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
@@ -39,14 +42,26 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
         </DialogHeader>
 
         <form
+          id='new-tx-form'
           action={(fd) => {
             setError(null)
             startTransition(async () => {
               const res = await createTransaction(fd)
               if (!res.ok) {
-                setError(res.error ?? 'Save failed')
+                const msg = res.error ?? 'Save failed. Please try again.'
+                setError(msg)
+                toast.error('Failed to save', { description: msg })
                 return
               }
+
+              toast.success('Transaction created', {
+                description: 'Your transaction was added successfully.',
+              })
+
+              // optional: reset fields and close
+              ;(
+                document.getElementById('new-tx-form') as HTMLFormElement
+              )?.reset()
               setOpen(false)
               router.refresh()
             })
@@ -58,13 +73,13 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
             <Input
               id='title'
               name='title'
-              placeholder='E.g. Salary, Rent, Market'
+              placeholder='e.g. Salary, Rent, Groceries'
               required
             />
           </div>
 
           <div className='grid gap-2'>
-            <Label htmlFor='amount'>Value</Label>
+            <Label htmlFor='amount'>Amount</Label>
             <Input
               id='amount'
               name='amount'
@@ -80,11 +95,11 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
             <Label>Type</Label>
             <Select name='type' defaultValue='expense'>
               <SelectTrigger>
-                <SelectValue placeholder='Selecione' />
+                <SelectValue placeholder='Select type' />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value='income'>Income</SelectItem>
-                <SelectItem value='expense'>Outcome</SelectItem>
+                <SelectItem value='expense'>Expense</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -93,17 +108,16 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
             <Label>Category</Label>
             <Select name='category' defaultValue='essential'>
               <SelectTrigger>
-                <SelectValue placeholder='Categoria' />
+                <SelectValue placeholder='Select category' />
               </SelectTrigger>
               <SelectContent>
-                {/* presets 50/30/20 */}
+                {/* 50/30/20 presets */}
                 <SelectItem value='essential'>Essential (50%)</SelectItem>
                 <SelectItem value='non-essential'>
-                  Non-Essential (30%)
+                  Non-essential (30%)
                 </SelectItem>
                 <SelectItem value='investment'>Investment (20%)</SelectItem>
-                {/* Pode digitar livre usando o input abaixo se você preferir um campo texto.
-                    Mantive Select para seu método 50/30/20. */}
+                {/* You can later swap this Select for a free-text input if you want fully custom categories. */}
               </SelectContent>
             </Select>
           </div>
@@ -120,6 +134,7 @@ export default function NewTransactionDialog({...props}: ButtonHTMLAttributes<HT
               type='button'
               variant='outline'
               onClick={() => setOpen(false)}
+              disabled={pending}
             >
               Cancel
             </Button>
