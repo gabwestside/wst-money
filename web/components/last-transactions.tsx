@@ -16,6 +16,8 @@ import {
   AlertDialogTrigger,
 } from './ui/alert-dialog'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { useState } from 'react'
+import LoadingOverlay from './loading-overlay'
 
 interface LatestTransactionsProps {
   data: DashboardData
@@ -25,24 +27,27 @@ export const LatestTransactions = ({
   data: { lastTransactions },
 }: LatestTransactionsProps) => {
   const router = useRouter()
+  const [deleting, setDeleting] = useState(false)
 
   const onDelete = async (fd: FormData) => {
+    setDeleting(true)
     try {
       const res = await deleteTransaction(fd)
       if (res?.ok) {
         toast.success('Transaction excluded', {
-          description: 'The transaction was successfully removed.'
+          description: 'The transaction was successfully removed.',
         })
       } else {
         toast.error('Error when deleting', {
-          description: res?.error ?? 'Try again in a moment.'
+          description: res?.error ?? 'Try again in a moment.',
         })
       }
     } catch {
       toast.error('Unexpected error', {
-        description: 'Could not delete. Check your connection.'
+        description: 'Could not delete. Check your connection.',
       })
     } finally {
+      setDeleting(false)
       router.refresh()
     }
   }
@@ -94,8 +99,8 @@ export const LatestTransactions = ({
                     <AlertDialogHeader>
                       <AlertDialogTitle>Delete transaction?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. You are about to
-                        delete “{t.title}”.
+                        This action cannot be undone. You are about to delete “
+                        {t.title}”.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
 
@@ -125,6 +130,8 @@ export const LatestTransactions = ({
           )}
         </ul>
       </CardContent>
+
+      <LoadingOverlay active={deleting} message='Deleting transaction…' />
     </Card>
   )
 }

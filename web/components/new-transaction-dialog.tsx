@@ -21,6 +21,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { ButtonHTMLAttributes, useState, useTransition } from 'react'
 import { toast } from 'sonner'
+import LoadingOverlay from './loading-overlay'
 
 export default function NewTransactionDialog({
   ...props
@@ -32,6 +33,7 @@ export default function NewTransactionDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
+      <LoadingOverlay active={pending} message='Saving transaction…' />
       <DialogTrigger asChild>
         <Button {...props}>+ Transaction</Button>
       </DialogTrigger>
