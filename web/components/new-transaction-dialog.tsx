@@ -35,7 +35,7 @@ export default function NewTransactionDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <LoadingOverlay active={pending} message='Saving transaction…' />
       <DialogTrigger asChild>
-        <Button {...props}>+ Transaction</Button>
+        <Button variant='outline' {...props}>+ Transaction</Button>
       </DialogTrigger>
 
       <DialogContent className='sm:max-w-md'>
@@ -60,7 +60,6 @@ export default function NewTransactionDialog({
                 description: 'Your transaction was added successfully.',
               })
 
-              // optional: reset fields and close
               ;(
                 document.getElementById('new-tx-form') as HTMLFormElement
               )?.reset()
