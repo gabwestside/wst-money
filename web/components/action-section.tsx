@@ -37,6 +37,9 @@ export const ActionSection = ({ monthValue, ...props }: ActionSectionProps) => {
         <NewTransactionDialog />
         <ThemeSwitcher />
       </div>
+      {/* <div className='ml-auto'>
+        <ActionMenu monthValue={monthValue} />
+      </div> */}
     </div>
   )
 }
