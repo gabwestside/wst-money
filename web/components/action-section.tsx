@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import NewTransactionDialog from './new-transaction-dialog'
+import { NewTransactionDialog } from './new-transaction-dialog'
 import { ThemeSwitcher } from './theme-switcher'
 
 interface ActionSectionProps extends React.HTMLAttributes<HTMLDivElement> {

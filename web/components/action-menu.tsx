@@ -8,11 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import NewTransactionDialog from './new-transaction-dialog'
-import { ThemeSwitcher } from './theme-switcher'
-import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import MonthSelect from './month-select'
+import { useRouter } from 'next/navigation'
+import { MonthSelect } from './month-select'
+import { NewTransactionDialog } from './new-transaction-dialog'
+import { ThemeSwitcher } from './theme-switcher'
 
 interface ActionMenuProps extends React.HTMLAttributes<HTMLElement> {
   monthValue: string
@@ -36,12 +36,8 @@ export const ActionMenu = ({ monthValue, ...props }: ActionMenuProps) => {
       <DropdownMenuContent className='w-56' align='start' {...props}>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-          </DropdownMenuItem>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuItem>
             <div className='flex items-center justify-end gap-2'>
               <Button
@@ -80,9 +76,7 @@ export const ActionMenu = ({ monthValue, ...props }: ActionMenuProps) => {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem>
-          Log out
-        </DropdownMenuItem>
+        <DropdownMenuItem>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

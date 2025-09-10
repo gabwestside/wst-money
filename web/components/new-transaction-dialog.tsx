@@ -24,9 +24,9 @@ import { ButtonHTMLAttributes, useState, useTransition } from 'react'
 import { toast } from 'sonner'
 import { LoadingOverlay } from './loading-overlay'
 
-export default function NewTransactionDialog({
+export const NewTransactionDialog = ({
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement>) {
+}: ButtonHTMLAttributes<HTMLButtonElement>) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
