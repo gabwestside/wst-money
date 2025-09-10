@@ -34,7 +34,7 @@ export const MonthSelect = ({ value, ...props }: MonthSelectProps) => {
 
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className='w-[220px]' {...props}>
+      <SelectTrigger {...props}>
         <SelectValue placeholder='Select month' />
       </SelectTrigger>
       <SelectContent>

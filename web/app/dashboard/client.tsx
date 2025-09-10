@@ -4,6 +4,7 @@ import { ActionSection } from '@/components/action-section'
 import { GraphicSection } from '@/components/graphic-section'
 import { Header } from '@/components/header'
 import { LatestTransactions } from '@/components/last-transactions'
+import { Subtitle } from '@/components/subtitle'
 import { SummaryCardList } from '@/components/summary-card-list'
 import type { DashboardData } from '@/lib/dashboard'
 
@@ -18,20 +19,20 @@ export default function DashboardClient({
   data,
   monthValue,
 }: DashboardClientProps) {
-  const balance = data.incomesTotal - data.expensesTotal
-
   return (
     <div className='space-y-6'>
-      <Header userName={userName} monthValue={monthValue} />
+      <Header userName={userName} />
 
-      <ActionSection monthValue={monthValue} />
+      <Subtitle monthValue={monthValue} />
 
       <SummaryCardList
-        balance={balance}
+        balance={data.incomesTotal - data.expensesTotal}
         incomesTotal={data.incomesTotal}
         expensesTotal={data.expensesTotal}
         bucket20={data.bucket20}
       />
+
+      <ActionSection monthValue={monthValue} />
 
       <LatestTransactions data={data} />
 

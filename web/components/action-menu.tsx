@@ -4,79 +4,58 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { MonthSelect } from './month-select'
-import { NewTransactionDialog } from './new-transaction-dialog'
-import { ThemeSwitcher } from './theme-switcher'
+import { Calendar, LogOut, MenuSquare, Settings, Sun, User } from 'lucide-react'
+import { LogoutButton } from './logout-button'
+import { MonthNavigator } from './month-navigator'
 
 interface ActionMenuProps extends React.HTMLAttributes<HTMLElement> {
   monthValue: string
 }
 
 export const ActionMenu = ({ monthValue, ...props }: ActionMenuProps) => {
-  const router = useRouter()
-
-  function shift(value: string, delta: number) {
-    const y = Number(value.slice(0, 4))
-    const m = Number(value.slice(5, 7)) - 1
-    const d = new Date(y, m + delta, 1)
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline'>Menu</Button>
+        <Button variant='outline'>
+          <MenuSquare /> Menu
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='start' {...props}>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        {/* <DropdownMenuLabel>My Account</DropdownMenuLabel> */}
         <DropdownMenuGroup>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>
-            <div className='flex items-center justify-end gap-2'>
-              <Button
-                variant='outline'
-                size='icon'
-                onClick={() =>
-                  router.push(`/dashboard?m=${shift(monthValue, -1)}`)
-                }
-                aria-label='Previous month'
-              >
-                <ChevronLeft className='h-4 w-4' />
-              </Button>
-
-              <MonthSelect value={monthValue} />
-
-              <Button
-                variant='outline'
-                size='icon'
-                onClick={() =>
-                  router.push(`/dashboard?m=${shift(monthValue, +1)}`)
-                }
-                aria-label='Next month'
-              >
-                <ChevronRight className='h-4 w-4' />
-              </Button>
-            </div>
+          <DropdownMenuItem disabled>
+            <User />
+            Profile
+          </DropdownMenuItem>
+          <DropdownMenuItem disabled>
+            <Settings />
+            Settings
+          </DropdownMenuItem>
+          <DropdownMenuItem disabled>
+            <Sun />
+            Light
+            {/* <ThemeSwitcher /> */}
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <NewTransactionDialog />
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            Theme
-            <ThemeSwitcher />
+            <Calendar />
+            <MonthNavigator monthValue={monthValue} className='-ml-3 -m-px' />
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem>
+          <LogoutButton
+            title='Logout'
+            variant='ghost'
+            className='w-full justify-start -ml-3'
+          >
+            <LogOut />
+          </LogoutButton>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

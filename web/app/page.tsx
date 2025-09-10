@@ -29,7 +29,7 @@ export default function Home() {
             Log In
           </Button>
         </Link>
-        <Link href='/auth/register'>
+        <Link href='/auth/sign-up'>
           <Button className='w-36'>Create Account</Button>
         </Link>
       </div>
