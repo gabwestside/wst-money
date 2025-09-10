@@ -35,7 +35,7 @@ export default function DashboardClient({
 
       <LatestTransactions data={data} />
 
-      <GraphicSection data={data} />
+      {data.monthlyByType.labels.length > 0 && <GraphicSection data={data} />}
     </div>
   )
 }

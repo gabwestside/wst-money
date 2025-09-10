@@ -15,7 +15,7 @@ export const SummaryCardList = ({
   ...props
 }: SummaryCardProps) => {
   return (
-    <div className='flex gap-4 overflow-y-auto border p-2 rounded-lg shadow' {...props}>
+    <div className='flex gap-4 overflow-y-auto border p-4 rounded-lg shadow' {...props}>
       <SummaryCard
         title='Current Balance'
         value={balance}
