@@ -10,7 +10,7 @@ export const Header = ({ userName, ...props }: HeaderProps) => {
       className='flex flex-col items-center justify-center gap-2 md:grid md:grid-cols-2 md:gap-4'
       {...props}
     >
-      <Logo href='/dashboard' size='lg' className='-ml-6' />
+      <Logo href='/dashboard' size='lg' className='md:-ml-4' />
 
       <h1 className='hidden ml-auto md:flex md:justify-end md:font-bold md:w-full'>
         Hello, {userName}
