@@ -28,14 +28,14 @@ export const ActionSection = ({ monthValue, ...props }: ActionSectionProps) => {
   }, [monthValue])
 
   return (
-    <div className='flex items-center  gap-4' {...props}>
-      <p className='text-muted-foreground'>
+    <div className='flex flex-col items-center md:flex-row gap-4' {...props}>
+      <p className='text-center md:text-start text-muted-foreground w-full'>
         Financial summary for {monthLabel}{' '}
       </p>
 
-      <div className='ml-auto w-full md:max-w-40'>
-        <NewTransactionDialog />
-        <ThemeSwitcher />
+      <div className='flex flex-col ml-auto w-full items-center  md:flex-row md:gap-2'>
+        <NewTransactionDialog className='ml-auto' />
+        <ThemeSwitcher className='hidden md:flex' />
       </div>
       {/* <div className='ml-auto'>
         <ActionMenu monthValue={monthValue} />

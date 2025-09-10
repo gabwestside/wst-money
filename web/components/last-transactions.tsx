@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button'
 import { DashboardData } from '@/lib/dashboard'
 import { Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { toast } from 'sonner'
+import { LoadingOverlay } from './loading-overlay'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,8 +18,6 @@ import {
   AlertDialogTrigger,
 } from './ui/alert-dialog'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import { useState } from 'react'
-import LoadingOverlay from './loading-overlay'
 
 interface LatestTransactionsProps {
   data: DashboardData

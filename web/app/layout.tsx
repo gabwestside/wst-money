@@ -30,12 +30,12 @@ export default function RootLayout({
       <body className={`${geistSans.className} antialiased`}>
         <ThemeProvider
           attribute='class'
-          defaultTheme='system'
+          defaultTheme='light'
           enableSystem
           disableTransitionOnChange
         >
           {children}
-          <Toaster richColors position="top-right" closeButton />
+          <Toaster richColors position='top-right' closeButton />
         </ThemeProvider>
       </body>
     </html>

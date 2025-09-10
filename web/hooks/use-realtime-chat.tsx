@@ -22,7 +22,9 @@ const EVENT_MESSAGE_TYPE = 'message'
 export function useRealtimeChat({ roomName, username }: UseRealtimeChatProps) {
   const supabase = createClient()
   const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [channel, setChannel] = useState<ReturnType<typeof supabase.channel> | null>(null)
+  const [channel, setChannel] = useState<ReturnType<
+    typeof supabase.channel
+  > | null>(null)
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {

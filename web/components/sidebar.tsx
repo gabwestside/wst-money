@@ -13,7 +13,7 @@ const links = [
   { href: '/settings', label: 'Settings' },
 ]
 
-export default function Sidebar() {
+export const Sidebar = () => {
   const pathname = usePathname()
 
   return (

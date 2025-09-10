@@ -4,21 +4,25 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Loader2 } from 'lucide-react'
 
-type Props = {
+interface LoadingOverlayProps extends React.HTMLAttributes<HTMLDivElement> {
   active: boolean
   message?: string
 }
 
-export default function LoadingOverlay({
+export const LoadingOverlay = ({
   active,
   message = 'Syncing with Supabase...',
-}: Props) {
+  ...props
+}: LoadingOverlayProps) => {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
   if (!mounted || !active) return null
 
   return createPortal(
-    <div className='fixed inset-0 z-[9999] flex items-center justify-center bg-background/60 backdrop-blur-sm'>
+    <div
+      className='fixed inset-0 z-[9999] flex items-center justify-center bg-background/60 backdrop-blur-sm'
+      {...props}
+    >
       <div className='flex items-center gap-3 rounded-2xl border bg-card p-6 text-card-foreground shadow-lg'>
         <Loader2 className='h-5 w-5 animate-spin text-primary' />
         <div className='text-sm'>

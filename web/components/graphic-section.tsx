@@ -56,7 +56,7 @@ export const GraphicSection = ({ data, ...props }: GraphicSectionProps) => {
       },
     ],
   }
-  
+
   return (
     <div className='grid gap-4 md:grid-cols-2' {...props}>
       <Card>

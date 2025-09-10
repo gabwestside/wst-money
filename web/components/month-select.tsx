@@ -8,10 +8,20 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { buildLastMonths } from '@/lib/utils'
+import { SelectTriggerProps } from '@radix-ui/react-select'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useMemo } from 'react'
+import { ForwardRefExoticComponent, RefAttributes, useMemo } from 'react'
 
-export default function MonthSelect({ value }: { value: string }) {
+interface MonthSelectProps
+  extends React.ComponentProps<
+    ForwardRefExoticComponent<
+      SelectTriggerProps & RefAttributes<HTMLButtonElement>
+    >
+  > {
+  value: string
+}
+
+export const MonthSelect = ({ value, ...props }: MonthSelectProps) => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const options = useMemo(() => buildLastMonths(18), [])
@@ -24,7 +34,7 @@ export default function MonthSelect({ value }: { value: string }) {
 
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className='w-[220px]'>
+      <SelectTrigger className='w-[220px]' {...props}>
         <SelectValue placeholder='Select month' />
       </SelectTrigger>
       <SelectContent>

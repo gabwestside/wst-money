@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import MonthSelect from './month-select'
+import { MonthSelect } from './month-select'
 import { Button } from './ui/button'
 
 interface HeaderProps extends React.HTMLAttributes<HTMLElement> {
@@ -19,7 +19,10 @@ export const Header = ({ userName, monthValue, ...props }: HeaderProps) => {
   }
 
   return (
-    <div className='grid gap-4 md:grid-cols-2' {...props}>
+    <div
+      className='flex flex-col justify-center items-center gap-2 md:grid md:gap-4 md:grid-cols-2'
+      {...props}
+    >
       <div className='flex items-center gap-2'>
         <h1 className='text-xl font-bold'>Hello, {userName}</h1>
       </div>

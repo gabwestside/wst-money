@@ -11,7 +11,7 @@ export const SummaryCard = ({
   color,
   ...props
 }: SummaryCardProps) => (
-  <Card {...props} className={`${color}`}>
+  <Card {...props} className={`${color} w-full min-w-[12rem]`}>
     <CardHeader>
       <CardTitle>{title}</CardTitle>
     </CardHeader>

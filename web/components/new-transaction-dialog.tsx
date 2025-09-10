@@ -18,10 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Plus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { ButtonHTMLAttributes, useState, useTransition } from 'react'
 import { toast } from 'sonner'
-import LoadingOverlay from './loading-overlay'
+import { LoadingOverlay } from './loading-overlay'
 
 export default function NewTransactionDialog({
   ...props
@@ -35,7 +36,10 @@ export default function NewTransactionDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <LoadingOverlay active={pending} message='Saving transaction…' />
       <DialogTrigger asChild>
-        <Button variant='outline' {...props}>+ Transaction</Button>
+        <Button variant='outline' {...props}>
+          <Plus />
+          Transaction
+        </Button>
       </DialogTrigger>
 
       <DialogContent className='sm:max-w-md'>
@@ -59,7 +63,6 @@ export default function NewTransactionDialog({
               toast.success('Transaction created', {
                 description: 'Your transaction was added successfully.',
               })
-
               ;(
                 document.getElementById('new-tx-form') as HTMLFormElement
               )?.reset()

@@ -1,7 +1,7 @@
 // app/dashboard/loading.tsx
 import { Skeleton } from '@/components/ui/skeleton'
 
-export default function Loading() {
+export const SkeletonLoading = () => {
   return (
     <div className='space-y-6'>
       {/* Header */}
