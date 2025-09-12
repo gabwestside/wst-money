@@ -11,6 +11,8 @@ Dashboard em tempo real, gráficos elegantes e uma UX pensada para web e mobile.
 
 ---
 
+<img width="1108" height="929" alt="image" src="https://github.com/user-attachments/assets/3cff440d-5a88-4b4e-8354-1f62b6f1417a" />
+
 ## ✨ Funcionalidades
 
 * Autenticação (Supabase Auth – email/senha ou provedores do template)
